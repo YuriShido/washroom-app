@@ -1,7 +1,7 @@
 import React from 'react'
 import "../App.scss"
 
-const header = () => {
+const Header = () => {
     return (
         <div className="header-container">
             <img className="top-icon" src="/img/toilet-icon.png" alt="toilet mark"/>
@@ -10,4 +10,4 @@ const header = () => {
     )
 }
 
-export default header
+export default Header
