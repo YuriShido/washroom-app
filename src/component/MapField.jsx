@@ -35,7 +35,15 @@ const options = {
     zoomControl: true
 
 }
+console.log(publicWashroomData)
 
+const today = new Date()
+const month = today.getMonth() + 1
+let season;
+if(month < 5 || month > 9) season = "winter"
+else season = "summer"
+console.log("month", month);
+console.log(season);
 
 const MapField = () => {
     const { isLoaded, loadError } = useLoadScript({
@@ -70,14 +78,13 @@ const MapField = () => {
     if (loadError) return "Error loading maps"
     if (!isLoaded) return "Loading Maps"
 
-    console.log(publicWashroomData)
     // const publicWashDataObject = JSON.parse(publicWashroomData)
     // console.log(publicWashDataObject);
-    const today = new Date()
-    const month = today.getMonth() + 1
-        if(month < 5 || month > 9) setSeason("winter") 
-    console.log(season);
-    console.log("month", month);
+
+    // if(month < 5 || month > 9) setSeason("winter") 
+    // console.log(season);
+    // console.log("month", month);
+    
     return (
         <div>
             <Search panTo={panTo} />
@@ -220,7 +227,7 @@ function Search({ panTo }) {
                     placeholder="Enter an address"
                 />
                 <ComboboxPopover>
-                    <ComboboxList>
+                    <ComboboxList className="list">
                         {status === "OK" && data.map(({ id, description }) => (
                             <ComboboxOption key={id} value={description} />
                         ))}
