@@ -61,9 +61,15 @@ const MapField = () => {
         console.log(event);
         setMarkers(current => [...current, {
             lat: event.latLng.lat(),
-            lng: event.latLng.lng()
+            lng: event.latLng.lng(),
+            time: new Date(),
         }]);
     }, [])
+
+    // something handle delete the marker
+    // const handleDelete = (event) => {
+    //     selected
+    // }
 
     const mapRef = useRef();
     const onMapLoad = useCallback((map) => {
@@ -147,9 +153,16 @@ const MapField = () => {
                             url: "/img/mark.svg",
                             scaledSize: new window.google.maps.Size(30, 30)
                         }}
+                        ここのonClickにハンドルファンクション入れる
                         onClick={() => {
                             setSelected(marker)
+                            console.log("selected:", selected);
+                            console.log(markers);
                         }}
+                        // onDblClick={() => {
+                        //     handleDelete(selected)
+                        // }}
+
                     />
                 ))}
                 {/* セレクトした場所をサーバーからのjsonデータと合わせてデータの中身を取って来なきゃいけないdivの中身の部分 */}
@@ -164,6 +177,7 @@ const MapField = () => {
                         <p>Open or Close</p>
                         <p>★★★ come from rate</p>
                         {/* make see more detail to show modal or detail info bottom of the map it get from the server data */}
+                        <p>{formatRelative(selected.time, new Date())}</p>
                         <p>See more a tag to detail here</p>
                     </div>
                 </InfoWindow>) : null}
