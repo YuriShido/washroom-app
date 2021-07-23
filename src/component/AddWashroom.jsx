@@ -7,7 +7,7 @@ const AddWashroom = ({lat, lng, setConfirmed}) => {
     const [discription, setDiscription] = useState('')
     // let [coordinate, setCoordinate] = useState({lat:null, lng:null})
     const [rate, setRate] = useState(null)
-    const [openTime, setOpenTime] = useState('')
+    const [openTime, setOpenTime] = useState(null)
     const [error, setError] = useState({})
     // const getNewWashroomData = () => {
 
@@ -67,6 +67,7 @@ const AddWashroom = ({lat, lng, setConfirmed}) => {
             <form className="addForm" onSubmit={submit}>
                 <label htmlFor='placeName'>Place name</label>
                 <input type='text'
+                        
                         className="addInfo"
                         id='placeName'
                         onChange={(e) => setName(e.target.value)} />
@@ -74,7 +75,7 @@ const AddWashroom = ({lat, lng, setConfirmed}) => {
                 <label htmlFor='discription'>Discription</label>
                 <select id='discription' className="addInfo"name='discription' onChange={(e) => setDiscription(e.target.value)}>
                     <option value="" selected disabled hidden>Choose here</option>
-                    <option value="Publish washroom">Publish washroom</option>
+                    <option value="Publish washroom">Public washroom</option>
                     <option value="Portable toilet">Portable toilet</option>
                     <option value="Washroom in the store">Washroom in the store</option>
                     <option value="Customer only in the Store">Customer only in the store</option>

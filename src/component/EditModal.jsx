@@ -1,6 +1,9 @@
 import React, {useState}from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
+import axios from 'axios'
+// import "../App.scss"
+import './EditModal.scss'
 
 const customStyles = {
   overlay: {
@@ -14,20 +17,30 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
+    padding: "1rem",
+    // margin: "2rem"
   },
 };
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
-Modal.setAppElement('#yourAppElement');
+// Modal.setAppElement('#Map');
 
-function EditModal() {
+function EditModal({setIsOpen, modalIsOpen, chose}) {
   let subtitle;
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [name, setName] = useState('');
+    const [discription, setDiscription] = useState('')
+    // let [coordinate, setCoordinate] = useState({lat:null, lng:null})
+    const [rate, setRate] = useState(null)
+    const [openTime, setOpenTime] = useState('')
+    const [error, setError] = useState({})
+//   const [modalIsOpen, setIsOpen] = useState(false);
 
-  function openModal() {
-    setIsOpen(true);
-  }
-
+//   function openModal() {
+//     setIsOpen(true);
+//   }
+    console.log(setIsOpen);
+    console.log(chose)
+    // setCoordinate({lat:chose})
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
     subtitle.style.color = '#f00';
@@ -36,10 +49,45 @@ function EditModal() {
   function closeModal() {
     setIsOpen(false);
   }
+  const submit = async (e) => {
+    e.preventDefault()
+   
+    if(!name) setName(chose.name);
+    if(!discription) setDiscription(chose.discription)
+    if(!rate) setRate(chose.rate)
+    if(!openTime) setOpenTime(chose.openTime)
+    console.log('name:', name, "discription:", discription, " coodinate:", chose.coordinate.lat, chose.coordinate.lng, rate, openTime)
+
+    try {
+        
+        const updateWashroom = {
+            name,
+            discription,
+            coordinate: {lat: chose.coordinate.lat, lng: chose.coordinate.lng},
+            openTime,
+            rate,
+
+        }
+        await axios.post(`http://localhost:5000/washroom/${chose._id}`, updateWashroom)
+        alert("Washroom Data Updated. Thank you!")
+        closeModal();
+    } catch(err) {
+        console.log("Error: ",err.response)
+    }
+}
+    const deleteHandler = async () => {
+        try {
+            await axios.delete(`http://localhost:5000/washroom/${chose._id}`)
+            const checkDelete = window.confirm('Are you sure to delete this wasroom data?')
+            if(checkDelete) closeModal()
+        } catch(err) {
+            console.log("Error: ",err.response)
+        }
+    }
 
   return (
-    <div>
-      <button onClick={openModal}>Open Modal</button>
+    <div className="editModal">
+      {/* <button onClick={openModal}>Open Modal</button> */}
       <Modal
         isOpen={modalIsOpen}
         onAfterOpen={afterOpenModal}
@@ -47,20 +95,51 @@ function EditModal() {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Hello</h2>
-        <button onClick={closeModal}>close</button>
-        <div>I am a modal</div>
-        <form>
-          <input />
-          <button>tab navigation</button>
-          <button>stays</button>
-          <button>inside</button>
-          <button>the modal</button>
-        </form>
+        {/* <button onClick={closeModal}>close</button> */}
+        <i className="fas fa-times closeBtn" onClick={closeModal} ></i>
+        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Update washroom data</h2>
+        <div className="washroom-container">
+
+            <form className="addForm" onSubmit={submit}>
+                    <label htmlFor='placeName'>Place name</label>
+                    <input type='text'
+                            className="addInfo"
+                            id='placeName'
+                            placeholder={chose.name}
+                            onChange={(e) => setName(e.target.value)} />
+                    {/* {error.name && <p className="validate">{error.name}</p>}         */}
+                    <label htmlFor='discription'>Discription</label>
+                    <select id='discription' className="addInfo" name='discription' 
+                            placeholder={chose.discription}
+                            onChange={(e) => setDiscription(e.target.value)}>
+                        <option value="" selected disabled hidden>Choose here</option>
+                        <option value="Publish washroom">Public washroom</option>
+                        <option value="Portable toilet">Portable toilet</option>
+                        <option value="Washroom in the store">Washroom in the store</option>
+                        <option value="Customer only in the Store">Customer only in the store</option>
+                    </select>
+                    {/* {error.discription && <p className="validate">{error.discription}</p>} */}
+                    <label htmlFor='OpenTime'>Available time</label>
+                    <input type='text'
+                            id='openTime'
+                            className="addInfo"
+                            placeholder={chose.openTime}
+                            onChange={(e) => setOpenTime(e.target.value)} />
+                    <label htmlFor='rate'>Clean rate(0-5)</label>
+                    <input type='range'
+                            id='rate'
+                            className="addInfo range"
+                            min="0" max="5"
+                            placeholder={chose.rate}
+                            onChange={(e) => setRate(e.target.value)} />
+                    <input className="submit" type='submit' value='Update washroom' />
+            <button onClick={deleteHandler}>Delete</button>
+                </form>
+        </div>
       </Modal>
     </div>
   );
 }
 
-// ReactDOM.render(<App />, appElement);
+// ReactDOM.render(<App />, );
 export default EditModal

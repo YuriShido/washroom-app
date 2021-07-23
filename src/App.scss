@@ -1,6 +1,7 @@
 
 .App {
   position: relative;
+  box-sizing: border-box;
 }
 .header-container {
   background-color: rgba(255, 255, 255, 0.8);
@@ -121,8 +122,22 @@
     }
   }
 
-  .edit {
-    color:blue;
-    border-bottom: 1px solid black;
-  }
+  
+}
+
+.edit {
+  color:blue;
+  
+  float: right;
+  cursor: pointer;
+
+}
+
+.edit:hover {
+  border-bottom: 1px solid black;
+  color:rgb(32, 134, 141);
+}
+
+.editBox {
+  
 }

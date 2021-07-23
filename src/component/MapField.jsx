@@ -20,6 +20,7 @@ import mapStyles from "../mapStyles";
 import * as publicWashroomData from "../data/public-washrooms.json";
 import AddWashroom from './AddWashroom'
 import axios from 'axios'
+import EditModal from './EditModal'
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -62,6 +63,8 @@ const MapField = () => {
     const [confirmed, setConfirmed] = useState(false)
     const [coordinate, setCoordinate] = useState({lat:null, lng:null })
 
+    const [modalIsOpen, setIsOpen] = useState(false);
+
     useEffect(() => {
         axios.get("http://localhost:5000/washroom/")
         .then( (response) => {
@@ -72,7 +75,7 @@ const MapField = () => {
         })
          .catch( err => console.log(err))
          
-        }, [allWashroomData.length, confirmed])
+        }, [allWashroomData.length, confirmed, modalIsOpen])
         console.log("all washroom:", allWashroomData);
 
         // allWashroomData.lengthを[]の中に入れる
@@ -121,7 +124,7 @@ const MapField = () => {
     // console.log("month", month);
     
     return (
-        <div>
+        <div id="Map">
             <Search panTo={panTo} />
             <Locate panTo={panTo} />
             <GoogleMap mapContainerStyle={mapContainerStyle}
@@ -142,7 +145,7 @@ const MapField = () => {
                                 lng: PWashroom.fields.geom.coordinates[0]
                             }}
                             icon={{
-                                url:"/img/public-washroom1.svg",
+                                url:"/img/public-washroom2.svg",
                                 scaledSize: new window.google.maps.Size(35, 35)
                             }}
                             onClick={() => {
@@ -165,8 +168,8 @@ const MapField = () => {
                             {season === "summer" ? (<p><i class="far fa-clock"></i> {pSelected.fields.summer_hours}</p>) :
                             (<p><i class="far fa-clock"></i>{pSelected.fields.wintter_hours}</p>)
                             }
-                            <p>Open or Close</p>
-                            <p>★★★ come from rate</p>
+                            <p>Public washroom</p>
+                            {/* <p>★★★ come from rate</p> */}
                             {/* make see more detail to show modal or detail info bottom of the map it get from the server data */}
                             <p>See more a tag to detail here</p>
                         </div>
@@ -182,12 +185,12 @@ const MapField = () => {
                             lng: washroom.coordinate.lng
                         }}
                         icon={{
-                            url: "/img/mark.svg",
+                            url: "/img/mark2.svg",
                             scaledSize: new window.google.maps.Size(30, 30)
                         }}
                         onClick={() => {
                             setChose(washroom)
-                            console.log("selectedData:", chose);
+                            console.log("ChoseData:", chose);
                         }}
                         
                     />))
@@ -206,7 +209,9 @@ const MapField = () => {
                         <p>{chose.updatedAt}</p>
                         {/* make see more detail to show modal or detail info bottom of the map it get from the server data */}
                         {/* <p>{formatRelative(chose.updatedAt, new Date())}</p> */}
-                        <p className="edit">Edit Data</p>
+                        <p className="edit"
+                            onClick={() => setIsOpen(true)}
+                        >Edit Data</p>
                     </div>
                 </InfoWindow>) : null}
 
@@ -262,6 +267,11 @@ const MapField = () => {
                             <AddWashroom  setConfirmed={setConfirmed} lat={coordinate.lat} lng={coordinate.lng}/>
                         </div>
                     ) : null
+            }
+            {
+                modalIsOpen ?  (
+                    <EditModal setIsOpen={setIsOpen} modalIsOpen={modalIsOpen} chose={chose}/>
+                ) : null
             }
         </div>
     )
