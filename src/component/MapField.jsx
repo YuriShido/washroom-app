@@ -17,7 +17,9 @@ import { formatRelative } from "date-fns";
 
 import "@reach/combobox/styles.css";
 import mapStyles from "../mapStyles";
-import * as publicWashroomData from "../data/public-washrooms.json"
+import * as publicWashroomData from "../data/public-washrooms.json";
+import AddWashroom from './AddWashroom'
+import axios from 'axios'
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -54,18 +56,45 @@ const MapField = () => {
     const [markers, setMarkers] = useState([]);
     const [selected, setSelected] = useState(null);
     const [pSelected, setPSelected] = useState(null);
+    const [chose, setChose] = useState(null)
     const [season, setSeason] = useState("summer");
+    const [allWashroomData, setAllWashroomData] = useState([])
+    const [confirmed, setConfirmed] = useState(false)
+    const [coordinate, setCoordinate] = useState({lat:null, lng:null })
 
+    useEffect(() => {
+        axios.get("http://localhost:5000/washroom/")
+        .then( (response) => {
+          console.log("response:", response.data);
+          // console.log(response.headers);
+          // console.log(response.config)
+          setAllWashroomData(response.data);
+        })
+         .catch( err => console.log(err))
+         
+        }, [allWashroomData.length, confirmed])
+        console.log("all washroom:", allWashroomData);
 
-    const onMapClick = useCallback((event) => {
+        // allWashroomData.lengthを[]の中に入れる
+
+    const onMapClick = useCallback(async (event) => {
         console.log(event);
-        setMarkers(current => [...current, {
-            lat: event.latLng.lat(),
-            lng: event.latLng.lng(),
-            time: new Date(),
-        }]);
-    }, [])
+        const check = window.confirm('Do you want to add washroom maker where you clicked?')
+        // await axios.post
+        if(check) {
 
+            setMarkers(current => [...current, {
+                lat: event.latLng.lat(),
+                lng: event.latLng.lng(),
+                time: new Date(),
+            }]);
+            setConfirmed(true)
+            console.log("confirmed", confirmed)
+            return setCoordinate({lat:event.latLng.lat(), lng:event.latLng.lng() })
+        }
+    }, [])
+    console.log("latCheck",coordinate.lat, coordinate.lng);
+    console.log("confirmedOut", confirmed);
     // something handle delete the marker
     // const handleDelete = (event) => {
     //     selected
@@ -144,6 +173,43 @@ const MapField = () => {
                     </InfoWindow>) : null
                 }
 
+                {/* getwashroomdata from the database */}
+                {
+                    allWashroomData &&  allWashroomData.map(washroom => (<Marker
+                        key={washroom._id}
+                        position={{
+                            lat: washroom.coordinate.lat,
+                            lng: washroom.coordinate.lng
+                        }}
+                        icon={{
+                            url: "/img/mark.svg",
+                            scaledSize: new window.google.maps.Size(30, 30)
+                        }}
+                        onClick={() => {
+                            setChose(washroom)
+                            console.log("selectedData:", chose);
+                        }}
+                        
+                    />))
+                }
+                {chose ? (<InfoWindow
+                    position={{ lat: chose.coordinate.lat, lng: chose.coordinate.lng }}
+                    onCloseClick={() => {
+                        setChose(null);
+                    }}
+                >
+                    <div>
+                        <h3>{chose.name}</h3>
+                        <p><i class="far fa-clock"></i> {chose.openTime}</p>
+                        <p>{chose.discription}</p>
+                        <p>{chose.rate}</p>
+                        <p>{chose.updatedAt}</p>
+                        {/* make see more detail to show modal or detail info bottom of the map it get from the server data */}
+                        {/* <p>{formatRelative(chose.updatedAt, new Date())}</p> */}
+                        <p className="edit">Edit Data</p>
+                    </div>
+                </InfoWindow>) : null}
+
                 {/* add new washroom data from the user */}
                 {markers.map((marker, index) => (
                     < Marker 
@@ -153,9 +219,9 @@ const MapField = () => {
                             url: "/img/mark.svg",
                             scaledSize: new window.google.maps.Size(30, 30)
                         }}
-                        ここのonClickにハンドルファンクション入れる
+                        // ここのonClickにハンドルファンクション入れる
                         onClick={() => {
-                            setSelected(marker)
+                             setSelected(marker)
                             console.log("selected:", selected);
                             console.log(markers);
                         }}
@@ -163,25 +229,40 @@ const MapField = () => {
                         //     handleDelete(selected)
                         // }}
 
+                        lat={marker.lat}
+                        lng={marker.lng}
+                        
                     />
+                    
                 ))}
+               
                 {/* セレクトした場所をサーバーからのjsonデータと合わせてデータの中身を取って来なきゃいけないdivの中身の部分 */}
+{/*              
                 {selected ? (<InfoWindow
                     position={{ lat: selected.lat, lng: selected.lng }}
                     onCloseClick={() => {
                         setSelected(null);
                     }}
-                >
+                    >
                     <div>
                         <h3>Place Name</h3>
                         <p>Open or Close</p>
                         <p>★★★ come from rate</p>
-                        {/* make see more detail to show modal or detail info bottom of the map it get from the server data */}
                         <p>{formatRelative(selected.time, new Date())}</p>
                         <p>See more a tag to detail here</p>
                     </div>
                 </InfoWindow>) : null}
+                     */}
             </GoogleMap>
+            {
+                    confirmed ? (
+                        <div>
+                            <i className="fas fa-times fa-2x close-button" onClick={() => {setConfirmed(false)}}></i>
+                            {/* // <button className="close-button" onClick={() => {setConfirmed(false)}}>Close Form</button> */}
+                            <AddWashroom  setConfirmed={setConfirmed} lat={coordinate.lat} lng={coordinate.lng}/>
+                        </div>
+                    ) : null
+            }
         </div>
     )
 }
@@ -253,3 +334,5 @@ function Search({ panTo }) {
 }
 
 export default MapField
+
+

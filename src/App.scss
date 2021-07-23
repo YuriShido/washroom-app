@@ -58,3 +58,71 @@
     cursor: pointer;
   }
 }
+
+.close-button {
+  position: fixed;
+  top: 50%;
+  right: 50%;
+    transform: translate(280px, -210px);
+  // top: 1rem;
+  // right: 1rem;
+  z-index: 99;
+}
+.addWashroom {
+  background-color: rgb(255, 255, 255);
+  width: 600px;
+  height: 450px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+    transform: translate(-50%, -50%);
+  z-index: 50;
+  h2 {
+    text-align: center;
+  }
+  .washroom-container {
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    
+    .addForm {
+      display: flex;
+      flex-direction: column;
+      width: 70%;
+      // align-items: center;
+      label {
+        margin: 2px;
+        width: 70%;
+      }
+
+      .addInfo {
+        margin: 0.3rem 0 1rem 0;
+        padding: 0.3rem;
+        width: 100%;
+      }
+      .range{
+        width: 60%;
+      }
+
+      .submit {
+        width: 8rem;
+        margin-bottom: 2rem;
+        font-size: 1rem;
+        // background-color:rgb(32, 134, 141);
+        // border-radius: 5px;
+      //  color: aliceblue;
+      }
+      .validate {
+        color:red;
+        margin-top: 0;
+      }
+    }
+  }
+
+  .edit {
+    color:blue;
+    border-bottom: 1px solid black;
+  }
+}
