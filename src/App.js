@@ -23,16 +23,11 @@ useEffect(() => {
   })
    .catch( err => console.log(err))
   }, [])
-  // useEffect(() => {
-  //   axios.get("http://localhost:5000/data")
-  //   .then((res) => res.json())
-  //   .then((res) => setBackData(res.data.message))
-     
-  // }, [])
+
 
 
   return (
-    <div className="App">
+    <div className="App" id="App">
       <Header />
       <MapField />
       {/* <h1>{backData}</h1> */}

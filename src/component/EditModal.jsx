@@ -18,12 +18,13 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     padding: "1rem",
+    fontFamily: "'Quicksand', sans-serif"
     // margin: "2rem"
   },
 };
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
-// Modal.setAppElement('#Map');
+Modal.setAppElement('#root');
 
 function EditModal({setIsOpen, modalIsOpen, chose}) {
   let subtitle;
@@ -39,7 +40,7 @@ function EditModal({setIsOpen, modalIsOpen, chose}) {
 //     setIsOpen(true);
 //   }
     console.log(setIsOpen);
-    console.log(chose)
+    console.log("propsFromchose:", chose)
     // setCoordinate({lat:chose})
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
@@ -49,15 +50,17 @@ function EditModal({setIsOpen, modalIsOpen, chose}) {
   function closeModal() {
     setIsOpen(false);
   }
-  const submit = async (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault()
-   
+    
     if(!name) setName(chose.name);
     if(!discription) setDiscription(chose.discription)
     if(!rate) setRate(chose.rate)
     if(!openTime) setOpenTime(chose.openTime)
-    console.log('name:', name, "discription:", discription, " coodinate:", chose.coordinate.lat, chose.coordinate.lng, rate, openTime)
-
+    
+    const time = new Date()
+    console.log('name:', name, "discription:", discription, " coodinate:", chose.coordinate.lat, chose.coordinate.lng, rate, openTime, time)
+    
     try {
         
         const updateWashroom = {
@@ -66,8 +69,10 @@ function EditModal({setIsOpen, modalIsOpen, chose}) {
             coordinate: {lat: chose.coordinate.lat, lng: chose.coordinate.lng},
             openTime,
             rate,
+            time: time
 
         }
+
         await axios.post(`http://localhost:5000/washroom/${chose._id}`, updateWashroom)
         alert("Washroom Data Updated. Thank you!")
         closeModal();
@@ -86,7 +91,7 @@ function EditModal({setIsOpen, modalIsOpen, chose}) {
     }
 
   return (
-    <div className="editModal">
+    <div id="EditModal"className="editModal">
       {/* <button onClick={openModal}>Open Modal</button> */}
       <Modal
         isOpen={modalIsOpen}
@@ -97,10 +102,10 @@ function EditModal({setIsOpen, modalIsOpen, chose}) {
       >
         {/* <button onClick={closeModal}>close</button> */}
         <i className="fas fa-times closeBtn" onClick={closeModal} ></i>
-        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Update washroom data</h2>
+        <h2 className="title" ref={(_subtitle) => (subtitle = _subtitle)}>Update washroom data</h2>
         <div className="washroom-container">
 
-            <form className="addForm" onSubmit={submit}>
+            <form className="addForm" onSubmit={submitHandler}>
                     <label htmlFor='placeName'>Place name</label>
                     <input type='text'
                             className="addInfo"
@@ -110,9 +115,10 @@ function EditModal({setIsOpen, modalIsOpen, chose}) {
                     {/* {error.name && <p className="validate">{error.name}</p>}         */}
                     <label htmlFor='discription'>Discription</label>
                     <select id='discription' className="addInfo" name='discription' 
-                            placeholder={chose.discription}
+                            // placeholder={chose.discription} 
+                            defaultValue={chose.discription} 
                             onChange={(e) => setDiscription(e.target.value)}>
-                        <option value="" selected disabled hidden>Choose here</option>
+                        {/* <option value="" selected disabled hidden>Choose here</option> */}
                         <option value="Publish washroom">Public washroom</option>
                         <option value="Portable toilet">Portable toilet</option>
                         <option value="Washroom in the store">Washroom in the store</option>
@@ -132,8 +138,11 @@ function EditModal({setIsOpen, modalIsOpen, chose}) {
                             min="0" max="5"
                             placeholder={chose.rate}
                             onChange={(e) => setRate(e.target.value)} />
+                    <div className="btn-in-edit">
                     <input className="submit" type='submit' value='Update washroom' />
-            <button onClick={deleteHandler}>Delete</button>
+                    <button className="delete" onClick={deleteHandler}><i className="fas fa-trash-alt"></i> Delete</button>
+
+                    </div>
                 </form>
         </div>
       </Modal>

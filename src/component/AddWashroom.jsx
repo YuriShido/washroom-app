@@ -1,38 +1,24 @@
-import React, {useState, useEffect}from 'react'
+import React, {useState}from 'react'
 import axios from 'axios'
+import Modal from 'react-modal';
 import "../App.scss"
 
-const AddWashroom = ({lat, lng, setConfirmed}) => {
+const AddWashroom = ({lat, lng, setConfirmed, addTime}) => {
     const [name, setName] = useState('');
     const [discription, setDiscription] = useState('')
     // let [coordinate, setCoordinate] = useState({lat:null, lng:null})
     const [rate, setRate] = useState(null)
     const [openTime, setOpenTime] = useState(null)
     const [error, setError] = useState({})
-    // const getNewWashroomData = () => {
+ 
 
-    // }
-    // setCoordinate = {lat: lat, lng: lng};
-    // console.log(lat, lng)
-    // const handleSetName = (e) => {
-    //     setName(e.target.value) 
-    //     if(!name) {
-    //         setError({name:"Name required"})
-    //         console.log(error.name);
-    //     }
-    // }
+    function closeModal() {
+        setConfirmed(false);
+      }
 
-    
-
-    // const handleSetDiscription = (e) => {
-    //     setDiscription(e.target.value)
-    //     if(!discription) {
-    //         setError({discription:"Discription required Please select again!"})
-    //     }
-    // }
     const submit = async (e) => {
         e.preventDefault()
-        console.log('name:', name, "discription:", discription, " coodinate:", lng, lng, rate, openTime)
+        console.log('name:', name, "discription:", discription, " coodinate:", lng, lng, rate, openTime, addTime)
         if(!name) {
               setError({name:"Name required!"})
             console.log(error.name);
@@ -49,8 +35,10 @@ const AddWashroom = ({lat, lng, setConfirmed}) => {
                 coordinate: {lat: lat, lng: lng},
                 openTime,
                 rate,
+                time: addTime
 
             }
+            console.log("addedinfo:",newWashroom);
             await axios.post("http://localhost:5000/washroom/add", newWashroom)
             alert("Washroom Data added. Thank you!")
             setConfirmed(false)
@@ -73,9 +61,11 @@ const AddWashroom = ({lat, lng, setConfirmed}) => {
                         onChange={(e) => setName(e.target.value)} />
                 {error.name && <p className="validate">{error.name}</p>}        
                 <label htmlFor='discription'>Discription</label>
-                <select id='discription' className="addInfo"name='discription' onChange={(e) => setDiscription(e.target.value)}>
+                <select id='discription' className="addInfo" name='discription' 
+                        onChange={(e) => setDiscription(e.target.value)}
+                        defaultValue="public washroom">
                     <option value="" selected disabled hidden>Choose here</option>
-                    <option value="Publish washroom">Public washroom</option>
+                    <option defaultValue="public washroom" value="Publish washroom">Public washroom</option>
                     <option value="Portable toilet">Portable toilet</option>
                     <option value="Washroom in the store">Washroom in the store</option>
                     <option value="Customer only in the Store">Customer only in the store</option>

@@ -163,7 +163,7 @@ const MapField = () => {
                             setPSelected(null);
                         }}
                     >
-                        <div>
+                        <div className="info-box">
                             <h3>{pSelected.fields.name}</h3>
                             {season === "summer" ? (<p><i class="far fa-clock"></i> {pSelected.fields.summer_hours}</p>) :
                             (<p><i class="far fa-clock"></i>{pSelected.fields.wintter_hours}</p>)
@@ -201,11 +201,11 @@ const MapField = () => {
                         setChose(null);
                     }}
                 >
-                    <div>
+                    <div className="info-box">
                         <h3>{chose.name}</h3>
                         <p><i class="far fa-clock"></i> {chose.openTime}</p>
                         <p>{chose.discription}</p>
-                        <p>{chose.rate}</p>
+                        <p>clean rate: {chose.rate}</p>
                         <p>{chose.updatedAt}</p>
                         {/* make see more detail to show modal or detail info bottom of the map it get from the server data */}
                         {/* <p>{formatRelative(chose.updatedAt, new Date())}</p> */}
@@ -262,9 +262,12 @@ const MapField = () => {
             {
                     confirmed ? (
                         <div>
-                            <i className="fas fa-times fa-2x close-button" onClick={() => {setConfirmed(false)}}></i>
+                            <i className="fas fa-times  close-button" onClick={() => {setConfirmed(false)}}></i>
                             {/* // <button className="close-button" onClick={() => {setConfirmed(false)}}>Close Form</button> */}
-                            <AddWashroom  setConfirmed={setConfirmed} lat={coordinate.lat} lng={coordinate.lng}/>
+                            <AddWashroom  setConfirmed={setConfirmed} 
+                                            lat={coordinate.lat} 
+                                            lng={coordinate.lng}
+                                            addTime={markers[0].time}/>
                         </div>
                     ) : null
             }
@@ -331,8 +334,8 @@ function Search({ panTo }) {
                     disabled={!ready}
                     placeholder="Enter an address"
                 />
-                <ComboboxPopover>
-                    <ComboboxList className="list">
+                <ComboboxPopover style={{ zIndex: 70}}>
+                    <ComboboxList className="list" style={{fontFamily: 'Quicksand'}}>
                         {status === "OK" && data.map(({ id, description }) => (
                             <ComboboxOption key={id} value={description} />
                         ))}
