@@ -1,36 +1,15 @@
 import './App.scss';
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import Header from './component/Header'
 import MapField from './component/MapField';
-import axios from 'axios'
 
 function App() {
-  const [backData, setBackData] =useState()
-
-  // useEffect(() => {
-  //   fetch("/data")
-  //   .then((res) => res.json())
-  //   .then((data) => setBackData(data.message))
-  // }, [])
-
-useEffect(() => {
-  axios.get("http://localhost:5000/data")
-  .then( (response) => {
-    console.log(response.data);
-    // console.log(response.headers);
-    // console.log(response.config)
-    setBackData(response.data.message);
-  })
-   .catch( err => console.log(err))
-  }, [])
-
-
-
+  
   return (
     <div className="App" id="App">
       <Header />
       <MapField />
-      {/* <h1>{backData}</h1> */}
+      <p className="copy-right">Copyright &copy; Run Van W/C 2021</p>
     </div>
   );
 }

@@ -15,6 +15,7 @@
     
     .title {
         text-align: center;
+        color: red;
     }
     .washroom-container {
         width: 600px;
@@ -85,4 +86,49 @@
                 margin-top: 0;
             }
         }
+    }
+
+
+    @media (max-width: 480px) {
+        .washroom-container {
+            // background-color: rgb(255, 255, 255);
+            width: 280px;
+
+            .addForm {
+
+            .btn-in-edit {
+                display: flex;
+                justify-content: space-between;
+                
+                .delete {
+                    font-family: 'Quicksand', sans-serif;
+                    font-size:12px ;
+                    height: 33px;
+                    background-color: rgb(0, 0, 0);
+                    color: white;
+                    font-weight: 500;
+                    border-radius: 5px;
+                    box-shadow: 2px 2px 2px grey;
+                    &:hover {
+                        background-color:gray;
+                    }
+                }
+                .submit {
+                    width: 10rem;
+                    height: 28px;
+                    margin-bottom: 2rem;
+                    font-size: 0.9rem;
+                    font-family: 'Quicksand', sans-serif;
+                    background-color:rgb(30, 173, 184);
+                    border-radius: 5px;
+                     color: aliceblue;
+                     font-weight: 500;
+                     border: none;
+                     box-shadow: 2px 2px 2px grey;
+                }
+
+            } 
+        }
+    }
+    
     }

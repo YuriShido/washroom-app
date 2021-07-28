@@ -1,16 +1,32 @@
 import React, {useState}from 'react'
 import axios from 'axios'
 import Modal from 'react-modal';
-import "../App.scss"
+import "./AddWashroom.scss"
 
-const AddWashroom = ({lat, lng, setConfirmed, addTime}) => {
+const AddWashroom = ({lat, lng, setConfirmed, confirmed, addTime}) => {
     const [name, setName] = useState('');
-    const [discription, setDiscription] = useState('')
-    // let [coordinate, setCoordinate] = useState({lat:null, lng:null})
+    const [discription, setDiscription] = useState('Public washroom')
     const [rate, setRate] = useState(null)
     const [openTime, setOpenTime] = useState(null)
     const [error, setError] = useState({})
  
+    const customStyles = {
+        overlay: {
+          zIndex: "100",
+          backgroundColor: "rgba(0, 0, 0, 0.5)"
+        },
+        content: {
+          top: '50%',
+          left: '50%',
+          right: 'auto',
+          bottom: 'auto',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)',
+          padding: "1rem",
+          fontFamily: "'Quicksand', sans-serif"
+          // margin: "2rem"
+        },
+      };
 
     function closeModal() {
         setConfirmed(false);
@@ -18,7 +34,7 @@ const AddWashroom = ({lat, lng, setConfirmed, addTime}) => {
 
     const submit = async (e) => {
         e.preventDefault()
-        console.log('name:', name, "discription:", discription, " coodinate:", lng, lng, rate, openTime, addTime)
+        // console.log('name:', name, "discription:", discription, " coodinate:", lng, lng, rate, openTime, addTime)
         if(!name) {
               setError({name:"Name required!"})
             console.log(error.name);
@@ -38,7 +54,7 @@ const AddWashroom = ({lat, lng, setConfirmed, addTime}) => {
                 time: addTime
 
             }
-            console.log("addedinfo:",newWashroom);
+            // console.log("addedinfo:",newWashroom);
             await axios.post("http://localhost:5000/washroom/add", newWashroom)
             alert("Washroom Data added. Thank you!")
             setConfirmed(false)
@@ -46,12 +62,19 @@ const AddWashroom = ({lat, lng, setConfirmed, addTime}) => {
             console.log("Error: ",err.response)
         }
     }
-    
+    Modal.setAppElement('#root');
     return (
         <div className="addWashroom">
-            <h2>Add washroom detail</h2>
-            <div className="washroom-container">
+        <Modal
+        isOpen={confirmed}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Add washroom"
+        >
 
+            <i className="fas fa-times closeBtn" onClick={closeModal} ></i>
+            <h2 className="title-add">Add washroom detail</h2>
+            <div className="washroom-container">
             <form className="addForm" onSubmit={submit}>
                 <label htmlFor='placeName'>Place name</label>
                 <input type='text'
@@ -63,9 +86,11 @@ const AddWashroom = ({lat, lng, setConfirmed, addTime}) => {
                 <label htmlFor='discription'>Discription</label>
                 <select id='discription' className="addInfo" name='discription' 
                         onChange={(e) => setDiscription(e.target.value)}
-                        defaultValue="public washroom">
-                    <option value="" selected disabled hidden>Choose here</option>
-                    <option defaultValue="public washroom" value="Publish washroom">Public washroom</option>
+                        value={discription}
+                        // defaultValue="public washroom"
+                        >
+                    {/* <option value="" selected disabled hidden>Choose here</option> */}
+                    <option value="Publish washroom">Public washroom</option>
                     <option value="Portable toilet">Portable toilet</option>
                     <option value="Washroom in the store">Washroom in the store</option>
                     <option value="Customer only in the Store">Customer only in the store</option>
@@ -86,6 +111,7 @@ const AddWashroom = ({lat, lng, setConfirmed, addTime}) => {
                 <input className="submit" type='submit' value='Add washroom' />
             </form>
             </div>
+        </Modal>
         </div>
     )
 }

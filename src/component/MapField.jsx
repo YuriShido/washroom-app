@@ -1,4 +1,5 @@
 import '../App.scss';
+import './MapField.scss'
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 // import Header from './component/header'
 import { GoogleMap, useLoadScript, Marker, InfoWindow } from "@react-google-maps/api"
@@ -13,7 +14,7 @@ import {
     ComboboxList,
     ComboboxOption,
 } from "@reach/combobox";
-import { formatRelative } from "date-fns";
+// import { formatRelative } from "date-fns";
 
 import "@reach/combobox/styles.css";
 import mapStyles from "../mapStyles";
@@ -28,9 +29,12 @@ const mapContainerStyle = {
     height: "100vh"
 }
 const center = {
-    lat: 49.24966,
-    lng: -123.11934
+    lat: 49.26778,
+    lng: -123.101463
 }
+
+// Vancouver coordinate
+// lat: 49.24966,lng: -123.11934
 
 const options = {
     styles: mapStyles,
@@ -38,15 +42,14 @@ const options = {
     zoomControl: true
 
 }
-console.log(publicWashroomData)
+// console.log(publicWashroomData)
 
 const today = new Date()
 const month = today.getMonth() + 1
 let season;
 if(month < 5 || month > 9) season = "winter"
 else season = "summer"
-console.log("month", month);
-console.log(season);
+
 
 const MapField = () => {
     const { isLoaded, loadError } = useLoadScript({
@@ -55,10 +58,10 @@ const MapField = () => {
     })
 
     const [markers, setMarkers] = useState([]);
-    const [selected, setSelected] = useState(null);
+    // const [selected, setSelected] = useState(null);
     const [pSelected, setPSelected] = useState(null);
     const [chose, setChose] = useState(null)
-    const [season, setSeason] = useState("summer");
+    // const [season, setSeason] = useState("summer");
     const [allWashroomData, setAllWashroomData] = useState([])
     const [confirmed, setConfirmed] = useState(false)
     const [coordinate, setCoordinate] = useState({lat:null, lng:null })
@@ -68,22 +71,19 @@ const MapField = () => {
     useEffect(() => {
         axios.get("http://localhost:5000/washroom/")
         .then( (response) => {
-          console.log("response:", response.data);
-          // console.log(response.headers);
-          // console.log(response.config)
           setAllWashroomData(response.data);
         })
          .catch( err => console.log(err))
          
         }, [allWashroomData.length, confirmed, modalIsOpen])
-        console.log("all washroom:", allWashroomData);
+        // console.log("all washroom:", allWashroomData);
 
-        // allWashroomData.lengthを[]の中に入れる
+      
 
     const onMapClick = useCallback(async (event) => {
-        console.log(event);
+        // console.log(event);
         const check = window.confirm('Do you want to add washroom maker where you clicked?')
-        // await axios.post
+        
         if(check) {
 
             setMarkers(current => [...current, {
@@ -92,16 +92,13 @@ const MapField = () => {
                 time: new Date(),
             }]);
             setConfirmed(true)
-            console.log("confirmed", confirmed)
+            // console.log("confirmed", confirmed)
             return setCoordinate({lat:event.latLng.lat(), lng:event.latLng.lng() })
         }
     }, [])
-    console.log("latCheck",coordinate.lat, coordinate.lng);
-    console.log("confirmedOut", confirmed);
-    // something handle delete the marker
-    // const handleDelete = (event) => {
-    //     selected
-    // }
+    
+    // console.log("confirmedOut", confirmed);
+    
 
     const mapRef = useRef();
     const onMapLoad = useCallback((map) => {
@@ -116,12 +113,6 @@ const MapField = () => {
     if (loadError) return "Error loading maps"
     if (!isLoaded) return "Loading Maps"
 
-    // const publicWashDataObject = JSON.parse(publicWashroomData)
-    // console.log(publicWashDataObject);
-
-    // if(month < 5 || month > 9) setSeason("winter") 
-    // console.log(season);
-    // console.log("month", month);
     
     return (
         <div id="Map">
@@ -165,13 +156,12 @@ const MapField = () => {
                     >
                         <div className="info-box">
                             <h3>{pSelected.fields.name}</h3>
-                            {season === "summer" ? (<p><i class="far fa-clock"></i> {pSelected.fields.summer_hours}</p>) :
-                            (<p><i class="far fa-clock"></i>{pSelected.fields.wintter_hours}</p>)
+                            {season === "summer" ? (<p><i className="far fa-clock"></i> {pSelected.fields.summer_hours}</p>) :
+                            (<p><i className="far fa-clock"></i>{pSelected.fields.wintter_hours}</p>)
                             }
                             <p>Public washroom</p>
-                            {/* <p>★★★ come from rate</p> */}
                             {/* make see more detail to show modal or detail info bottom of the map it get from the server data */}
-                            <p>See more a tag to detail here</p>
+                            {/* <p>See more a tag to detail here</p> */}
                         </div>
                     </InfoWindow>) : null
                 }
@@ -190,7 +180,7 @@ const MapField = () => {
                         }}
                         onClick={() => {
                             setChose(washroom)
-                            console.log("ChoseData:", chose);
+                            // console.log("ChoseData:", chose);
                         }}
                         
                     />))
@@ -203,7 +193,7 @@ const MapField = () => {
                 >
                     <div className="info-box">
                         <h3>{chose.name}</h3>
-                        <p><i class="far fa-clock"></i> {chose.openTime}</p>
+                        <p><i className="far fa-clock"></i> {chose.openTime}</p>
                         <p>{chose.discription}</p>
                         <p>clean rate: {chose.rate}</p>
                         <p>{chose.updatedAt}</p>
@@ -224,16 +214,7 @@ const MapField = () => {
                             url: "/img/mark.svg",
                             scaledSize: new window.google.maps.Size(30, 30)
                         }}
-                        // ここのonClickにハンドルファンクション入れる
-                        onClick={() => {
-                             setSelected(marker)
-                            console.log("selected:", selected);
-                            console.log(markers);
-                        }}
-                        // onDblClick={() => {
-                        //     handleDelete(selected)
-                        // }}
-
+                        
                         lat={marker.lat}
                         lng={marker.lng}
                         
@@ -241,30 +222,14 @@ const MapField = () => {
                     
                 ))}
                
-                {/* セレクトした場所をサーバーからのjsonデータと合わせてデータの中身を取って来なきゃいけないdivの中身の部分 */}
-{/*              
-                {selected ? (<InfoWindow
-                    position={{ lat: selected.lat, lng: selected.lng }}
-                    onCloseClick={() => {
-                        setSelected(null);
-                    }}
-                    >
-                    <div>
-                        <h3>Place Name</h3>
-                        <p>Open or Close</p>
-                        <p>★★★ come from rate</p>
-                        <p>{formatRelative(selected.time, new Date())}</p>
-                        <p>See more a tag to detail here</p>
-                    </div>
-                </InfoWindow>) : null}
-                     */}
             </GoogleMap>
             {
                     confirmed ? (
                         <div>
-                            <i className="fas fa-times  close-button" onClick={() => {setConfirmed(false)}}></i>
+                            {/* <i className="fas fa-times  close-button" onClick={() => {setConfirmed(false)}}></i> */}
                             {/* // <button className="close-button" onClick={() => {setConfirmed(false)}}>Close Form</button> */}
                             <AddWashroom  setConfirmed={setConfirmed} 
+                                            confirmed={confirmed}
                                             lat={coordinate.lat} 
                                             lng={coordinate.lng}
                                             addTime={markers[0].time}/>
@@ -287,7 +252,7 @@ function Locate({ panTo }) {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             })
-            console.log(position);
+            // console.log(position);
         }, () => null, options);
     }}>
         <img src="/img/compass2.svg" alt="compass - locate" />
@@ -318,8 +283,7 @@ function Search({ panTo }) {
                         const results = await getGeocode({ address })
                         const { lat, lng } = await getLatLng(results[0]);
                         panTo({ lat, lng })
-                        console.log(lat, lng);
-                        console.log(results[0]);
+                        // console.log(results[0]);
                         // getLatLng,
                     } catch (error) {
                         console.log("error");

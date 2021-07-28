@@ -1,0 +1,75 @@
+
+   .title-add{
+      text-align: center;
+      color: rgb(2, 2, 168);
+    }
+    .washroom-container {
+        background-color: rgb(255, 255, 255);
+        width: 600px;
+        height: 450px;
+        margin: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+      
+      .addForm {
+        display: flex;
+        flex-direction: column;
+        width: 70%;
+        // align-items: center;
+        label {
+          margin: 2px;
+          width: 70%;
+        }
+  
+        .addInfo {
+          margin: 0.3rem 0 1rem 0;
+          padding: 0.3rem;
+          width: 100%;
+          font-family: 'Quicksand', sans-serif;
+
+        }
+        .range{
+          width: 60%;
+        }
+  
+        .submit {
+          width: 8rem;
+          height: 28px;
+          margin-bottom: 2rem;
+          font-size: 1rem;
+          // background-color:rgb(32, 134, 141);
+          // border-radius: 5px;
+        //  color: aliceblue;
+        font-family: 'Quicksand', sans-serif;
+        background-color:rgb(30, 173, 184);
+        background-color:rgb(235, 238, 43);
+  
+        border-radius: 5px;
+         color: rgb(3, 3, 3);
+         font-weight: 500;
+         border: none;
+         box-shadow: 2px 2px 2px grey;
+  
+         &:hover {
+          background-color: rgb(200, 228, 42);
+          // background-color:rgb(30, 173, 184);
+          // color: gray;
+  
+         }
+        }
+        .validate {
+          color:red;
+          margin-top: 0;
+        }
+      }
+    }
+  
+    
+@media (max-width: 480px) {
+    .washroom-container {
+        // background-color: rgb(255, 255, 255);
+        width: 280px;
+    } 
+}

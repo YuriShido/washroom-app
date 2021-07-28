@@ -1,5 +1,6 @@
 import React from 'react'
-import "../App.scss"
+// import "../App.scss"
+import "./Header.scss"
 import About from './About'
 
 const Header = () => {
@@ -10,8 +11,8 @@ const Header = () => {
     // }
     return (
         <div className="header-container">
-            <img className="top-icon" src="/img/toilet-icon.png" alt="toilet mark"/>
-            <h1>Run Van W/C</h1>
+            <img className="top-logo" src="/img/logo2.png" alt="logo"/>
+            {/* <h1>Run Van W/C</h1> */}
             <p className="about" onClick={() => setAboutModalOpen(true)}>About</p>
             {
                 AboutModalOpen ? (
