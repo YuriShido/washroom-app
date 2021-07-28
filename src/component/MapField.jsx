@@ -69,7 +69,8 @@ const MapField = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:5000/washroom/")
+
+        axios.get(`${process.env.REACT_APP_SERVER_URL}washroom/`)
         .then( (response) => {
           setAllWashroomData(response.data);
         })

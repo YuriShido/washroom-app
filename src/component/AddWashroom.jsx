@@ -55,7 +55,7 @@ const AddWashroom = ({lat, lng, setConfirmed, confirmed, addTime}) => {
 
             }
             // console.log("addedinfo:",newWashroom);
-            await axios.post("http://localhost:5000/washroom/add", newWashroom)
+            await axios.post(`${process.env.REACT_APP_SERVER_URL}washroom/add`, newWashroom)
             alert("Washroom Data added. Thank you!")
             setConfirmed(false)
         } catch(err) {

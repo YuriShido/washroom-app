@@ -55,7 +55,7 @@ function EditModal({ setIsOpen, modalIsOpen, chose }) {
 
             }
 
-            await axios.post(`http://localhost:5000/washroom/${chose._id}`, updateWashroom)
+            await axios.post(`${process.env.REACT_APP_SERVER_URL}washroom/${chose._id}`, updateWashroom)
             alert("Washroom Data Updated. Thank you!")
             closeModal();
         } catch (err) {
@@ -65,7 +65,7 @@ function EditModal({ setIsOpen, modalIsOpen, chose }) {
 
     const deleteHandler = async () => {
         try {
-            await axios.delete(`http://localhost:5000/washroom/${chose._id}`)
+            await axios.delete(`${process.env.REACT_APP_SERVER_URL}washroom/${chose._id}`)
             const checkDelete = window.confirm('Are you sure to delete this wasroom data?')
             if (checkDelete) closeModal()
         } catch (err) {
