@@ -11,7 +11,7 @@ const Header = () => {
     // }
     return (
         <div className="header-container">
-            <img className="top-logo" src="/img/logo2.png" alt="logo"/>
+            <img className="top-logo" src="/img/logo3.png" alt="logo"/>
             {/* <h1>Run Van W/C</h1> */}
             <p className="about" onClick={() => setAboutModalOpen(true)}>About</p>
             {
