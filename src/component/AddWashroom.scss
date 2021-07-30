@@ -70,9 +70,11 @@
 @media (max-width: 480px) {
     .washroom-container {
         // background-color: rgb(255, 255, 255);
-        width: 280px;
+        width: 285px;
 
         .addForm {
+            width: 80%;
+            
             .submit {
                 width: inherit;
             }
