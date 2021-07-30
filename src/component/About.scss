@@ -25,5 +25,17 @@ h1 {
         overflow-y: scroll;
         // overflow: hidden;
         padding: 0;
+
+        .explain {
+            .icon {
+                width: 1.7rem;
+                margin-right: 0.7rem;
+            }
+        }
+        
+
+        h3 {
+            font-size: 18px;
+        }
     }
 }
