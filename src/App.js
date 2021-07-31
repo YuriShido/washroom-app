@@ -10,7 +10,7 @@ function App() {
     <div className="App" id="App">
       <Header />
       <MapField />
-      <p className="copy-right">Copyright &copy; Run Van W/C 2021</p>
+      <p className="copy-right">Copyright &copy; Run Van TOILET 2021</p>
     </div>
   );
 }
