@@ -158,7 +158,7 @@ const MapField = () => {
                         <div className="info-box">
                             <h3>{pSelected.fields.name}</h3>
                             {season === "summer" ? (<p><i className="far fa-clock"></i> {pSelected.fields.summer_hours}</p>) :
-                            (<p><i className="far fa-clock"></i>{pSelected.fields.wintter_hours}</p>)
+                            (<p><i className="far fa-clock"></i>{pSelected.fields.winter_hours}</p>)
                             }
                             <p>Public washroom</p>
                             {/* make see more detail to show modal or detail info bottom of the map it get from the server data */}
